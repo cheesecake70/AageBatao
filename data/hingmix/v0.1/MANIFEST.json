@@ -1,0 +1,33 @@
+{
+ "version": "v0.1",
+ "seed": 42,
+ "hingcorpus_lines_read": 550000,
+ "foreign_dropped_from_train_val": 10488,
+ "near_duplicates_dropped_from_train": 0,
+ "rows": {
+  "train": {
+   "total": 458621,
+   "by_source": {
+    "hingcorpus": 458621
+   }
+  },
+  "val": {
+   "total": 24138,
+   "by_source": {
+    "hingcorpus": 24138
+   }
+  },
+  "test_a": {
+   "total": 766,
+   "by_source": {
+    "cmu_dog": 766
+   }
+  },
+  "test_b": {
+   "total": 1160,
+   "by_source": {
+    "phinc": 1160
+   }
+  }
+ }
+}

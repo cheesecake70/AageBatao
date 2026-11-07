@@ -1,0 +1,8 @@
+# M4 NumPy LSTM: understanding + gradient check, not a leaderboard entry.
+family: lstm_np
+emb: 64
+hidden: 64
+window: 32
+lr: 0.5
+sentences: 50000
+vocab_size: 5000

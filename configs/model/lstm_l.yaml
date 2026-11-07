@@ -1,0 +1,12 @@
+# PRD section 7 size table. family lstm_w. lr per PRD: 2e-3 for xs/s, 1e-3 for m/l/xl.
+family: lstm_w
+size: l
+emb: 512
+hidden: 512
+layers: 2
+dropout: 0.3
+tie_weights: true
+batch_size: 128
+window: 64
+lr: 0.001
+weight_decay: 0.01

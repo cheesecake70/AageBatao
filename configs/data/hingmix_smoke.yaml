@@ -1,0 +1,4 @@
+version: smoke
+root: data/hingmix
+vocab_size: 30000
+vocab_file: data/hingmix/smoke/vocab.json

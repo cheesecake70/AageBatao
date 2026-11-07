@@ -1,0 +1,9 @@
+{
+  "mode": "in-process (xs, cpu)",
+  "n": 200,
+  "p50_ms": 0.67,
+  "p95_ms": 1.16,
+  "max_ms": 1.66,
+  "target_p95_ms": 30,
+  "meets_target": true
+}

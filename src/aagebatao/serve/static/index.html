@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aage Batao</title>
+<style>
+  :root { --bg:#fafafa; --fg:#1b1b1b; --muted:#8a8a8a; --accent:#2f6fed; --card:#fff; --border:#e2e2e2; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#141414; --fg:#ececec; --muted:#7a7a7a; --card:#1e1e1e; --border:#333; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif; }
+  main { max-width:720px; margin:0 auto; padding:40px 16px; }
+  h1 { font-size:22px; margin:0 0 4px; } h1 span { color:var(--muted); font-weight:400; font-size:15px; margin-left:8px; }
+  p.hint { color:var(--muted); margin:0 0 20px; font-size:14px; }
+  .editor { position:relative; background:var(--card); border:1px solid var(--border); border-radius:10px; }
+  .editor textarea, .editor .mirror {
+    margin:0; padding:16px; width:100%; min-height:160px; border:0; border-radius:10px;
+    font:inherit; font-size:18px; line-height:1.6; white-space:pre-wrap; word-wrap:break-word; overflow-wrap:anywhere;
+  }
+  .editor textarea { position:relative; background:transparent; color:var(--fg); resize:vertical; outline:none; display:block; }
+  .editor .mirror { position:absolute; inset:0; color:transparent; pointer-events:none; overflow:hidden; }
+  .mirror .ghost { color:var(--muted); }
+  .chips { display:flex; gap:8px; margin:14px 0 6px; min-height:36px; flex-wrap:wrap; }
+  .chip { border:1px solid var(--border); background:var(--card); border-radius:999px; padding:6px 14px; cursor:pointer; font-size:15px; }
+  .chip:hover, .chip.first { border-color:var(--accent); }
+  .chip small { color:var(--muted); margin-left:6px; }
+  .status { color:var(--muted); font-size:13px; display:flex; justify-content:space-between; }
+  kbd { border:1px solid var(--border); border-bottom-width:2px; border-radius:4px; padding:0 5px; font-size:12px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Aage Batao <span>Hinglish next-word autocomplete</span></h1>
+  <p class="hint">Type Roman-script Hinglish. <kbd>Tab</kbd> accepts the grey suggestion, or click a chip.</p>
+  <div class="editor">
+    <pre class="mirror" id="mirror" aria-hidden="true"></pre>
+    <textarea id="input" placeholder="kal main office..." autofocus spellcheck="false"></textarea>
+  </div>
+  <div class="chips" id="chips"></div>
+  <div class="status"><span id="latency"></span><span id="model"></span></div>
+</main>
+<script>
+  const input = document.getElementById('input');
+  const mirror = document.getElementById('mirror');
+  const chips = document.getElementById('chips');
+  const latencyEl = document.getElementById('latency');
+  let current = { words: [], probs: [], partial: '' };
+  let timer = null, seq = 0;
+
+  fetch('/health').then(r => r.json()).then(h => {
+    document.getElementById('model').textContent =
+      `LSTM, ${(h.params/1e6).toFixed(1)}M params, vocab ${h.vocab_size}`;
+  }).catch(() => {});
+
+  function completionText(word) {
+    // what gets appended to the visible text if `word` is accepted
+    const p = current.partial;
+    return word.slice(p.length) + ' ';
+  }
+
+  function render() {
+    const text = input.value;
+    // no ghost on an empty box: it would sit on top of the placeholder
+    const ghost = (text && current.words.length) ? completionText(current.words[0]) : '';
+    mirror.textContent = text;
+    if (ghost) { const s = document.createElement('span'); s.className = 'ghost'; s.textContent = ghost; mirror.appendChild(s); }
+    chips.innerHTML = '';
+    current.words.forEach((w, i) => {
+      const b = document.createElement('button');
+      b.className = 'chip' + (i === 0 ? ' first' : '');
+      b.innerHTML = `${w}<small>${(current.probs[i]*100).toFixed(1)}%</small>`;
+      b.onclick = () => accept(i);
+      chips.appendChild(b);
+    });
+  }
+
+  function accept(i) {
+    if (!current.words.length) return;
+    input.value = input.value + completionText(current.words[i]);
+    current = { words: [], probs: [], partial: '' };
+    render();
+    input.focus();
+    input.setSelectionRange(input.value.length, input.value.length);
+    request();
+  }
+
+  async function request() {
+    const mySeq = ++seq;
+    const text = input.value;
+    if (!text.trim()) {  // blank input: show no suggestions
+      current = { words: [], probs: [], partial: '' };
+      render();
+      return;
+    }
+    try {
+      const r = await fetch('/predict', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, k: 3 }) });
+      if (!r.ok) throw new Error(r.statusText);
+      const data = await r.json();
+      if (mySeq !== seq || text !== input.value) return;  // stale
+      current = data;
+      latencyEl.textContent = `model ${data.latency_ms} ms`;
+      render();
+    } catch (e) { latencyEl.textContent = 'server unreachable'; }
+  }
+
+  input.addEventListener('input', () => {
+    current = { words: [], probs: [], partial: '' };
+    render();
+    clearTimeout(timer);
+    timer = setTimeout(request, 80);
+  });
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab' && current.words.length) { e.preventDefault(); accept(0); }
+  });
+  input.addEventListener('scroll', () => { mirror.scrollTop = input.scrollTop; });
+  request();
+</script>
+</body>
+</html>

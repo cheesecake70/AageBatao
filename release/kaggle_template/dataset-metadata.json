@@ -1,0 +1,7 @@
+{
+  "title": "HingMix v0.1 - Roman Hinglish Next-Word Dataset",
+  "id": "YOUR_KAGGLE_USERNAME/hingmix-hinglish-next-word",
+  "subtitle": "485k cleaned, language-tagged Hinglish messages for autocomplete",
+  "licenses": [{"name": "CC-BY-NC-SA-4.0"}],
+  "keywords": ["nlp", "text", "india", "languages"]
+}

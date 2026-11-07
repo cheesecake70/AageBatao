@@ -1,0 +1,4 @@
+version: v0.1
+root: data/hingmix
+vocab_size: 30000
+vocab_file: data/hingmix/v0.1/vocab.json

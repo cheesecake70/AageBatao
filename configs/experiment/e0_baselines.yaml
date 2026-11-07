@@ -1,0 +1,9 @@
+# E0: sanity baselines (PRD section 8). Runs: ngram 3/4/5 + lstm_np + the single lstm_w m run.
+exp: e0
+data: hingmix_v0_1
+mix: real
+seeds: [42]
+models: [ngram_3, ngram_4, ngram_5, lstm_np, lstm_m]
+acceptance:
+  lstm_m_vs_ngram5_relative_ppl_gain: 0.15   # LSTM must beat the 5-gram by >= 15 %
+  numpy_grad_check_atol: 1.0e-6

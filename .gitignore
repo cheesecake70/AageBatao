@@ -1,0 +1,28 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.DS_Store
+data/interim/
+data/hingmix/smoke/
+data/hingmix/**/*.parquet
+mlruns/
+artifacts/*
+data/raw/hingcorpus/
+# keep the deployed checkpoint and the small training logs; everything else in artifacts/ stays local
+!artifacts/e0_lstm_w_m_475k_real_s42_best.pt
+!artifacts/*_log.csv
+artifacts/*_18k_*
+
+# private planning docs
+HingLSTM*PRD*.md
+reports/PLAN.md
+
+# built Kaggle upload (regenerate with scripts/make_kaggle_release.py)
+release/kaggle/
+
+# launch video and local tooling (not for the public repo)
+brag-output/
+.claude/

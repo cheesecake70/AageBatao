@@ -1,0 +1,4 @@
+family: ngram4
+order: 4
+smoothing: kneser_ney
+discount_fallback: true

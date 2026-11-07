@@ -1,0 +1,9 @@
+{
+  "mode": "in-process (m, cpu)",
+  "n": 200,
+  "p50_ms": 2.61,
+  "p95_ms": 3.66,
+  "max_ms": 6.08,
+  "target_p95_ms": 30,
+  "meets_target": true
+}

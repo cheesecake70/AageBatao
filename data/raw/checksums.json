@@ -1,0 +1,10 @@
+{
+ "data/raw/cmu_dog/hinglish/train.parquet": "ce36a4aa054be82e6fc6857afa796fd1145b6544566e9151655b799ef17bf22a",
+ "data/raw/cmu_dog/hinglish/validation.parquet": "b13707b2fde4203d77a10f7c0e6bfe6ea27ec8014dd7d7cd868ca67f1051cc35",
+ "data/raw/cmu_dog/hinglish/test.parquet": "75aac173d55983b24852fc30f097a60e11e9055cfef485b719e80f77d1c7767e",
+ "data/raw/hingcorpus/L3Cube-HingCorpus_roman.tar.gz": "1d454a3107f249931ee89d4dd87c612bf512a134c3b92776120df1ec7aa0e188",
+ "data/raw/phinc/hinglish_english_parallel_corpus.csv": "325ba383cd6d73e0c3128885e2a79133e612ec03d18c8b55506d0b4b12ec68ed",
+ "data/raw/hinglid/train.txt": "079607dd52d5cf56039b8ac6060fed9518914aa6b0e3d7699a799818d6b6574b",
+ "data/raw/hinglid/validation.txt": "f9e9e96d1961eac04ce21165dab345a19fcfb4d28f8cc639804a40494010188c",
+ "data/raw/hinglid/test.txt": "6007c2999e97e946ebf3b2ca49ddff16fda0a29e7b6c9ca28d0d006329f70303"
+}

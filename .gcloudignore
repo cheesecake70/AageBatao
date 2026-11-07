@@ -1,0 +1,25 @@
+# gcloud run deploy --source honours this file (gitignore syntax); kept identical to .dockerignore.
+# The image only needs src/, configs/model/, one vocab and one checkpoint (see Dockerfile COPY lines).
+# Everything else is excluded so the build upload does not carry the 2.4 GB raw corpus.
+# gitignore semantics: patterns are anchored with a leading slash so they only exclude top-level
+# entries, and every parent directory on the way to a kept file is re-included explicitly.
+/*
+!/Dockerfile
+!/pyproject.toml
+!/README.md
+!/src/
+!/configs/
+/configs/*
+!/configs/model/
+!/data/
+/data/*
+!/data/hingmix/
+/data/hingmix/*
+!/data/hingmix/v0.1/
+/data/hingmix/v0.1/*
+!/data/hingmix/v0.1/vocab.json
+!/artifacts/
+/artifacts/*
+!/artifacts/e0_lstm_w_m_475k_real_s42_best.pt
+__pycache__/
+*.pyc

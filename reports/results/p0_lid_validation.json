@@ -1,0 +1,22 @@
+{
+ "sentences": 6420,
+ "tokens": 193547,
+ "token_accuracy": 0.9958,
+ "sentences_per_sec": 86.4,
+ "gold_labels": [
+  [
+   "HI",
+   136824
+  ],
+  [
+   "EN",
+   56723
+  ]
+ ],
+ "confusion": {
+  "en->en": 56242,
+  "en->hi": 481,
+  "hi->en": 334,
+  "hi->hi": 136490
+ }
+}
