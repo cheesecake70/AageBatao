@@ -19,6 +19,17 @@ from aagebatao.data.tokenize import SPECIALS, Vocab, tokenize
 from aagebatao.models.lstm import WordLSTM, from_config
 
 CANDIDATE_POOL = 200  # how many top words to consider before prefix-filtering a partial word
+BLOCKLIST_PATH = Path(__file__).with_name("blocklist.txt")
+
+
+def load_blocklist(path: str | Path = BLOCKLIST_PATH) -> frozenset[str]:
+    """Lowercased swear words to never suggest; '#' starts a comment, blank lines skipped."""
+    words = set()
+    for line in Path(path).read_text(encoding="utf-8").splitlines():
+        w = line.split("#", 1)[0].strip().lower()
+        if w:
+            words.add(w)
+    return frozenset(words)
 
 
 @dataclass
@@ -30,13 +41,26 @@ class Prediction:
 
 
 class Predictor:
-    def __init__(self, vocab: Vocab, model: WordLSTM, device: str = "cpu"):
+    def __init__(
+        self,
+        vocab: Vocab,
+        model: WordLSTM,
+        device: str = "cpu",
+        blocklist: frozenset[str] | None = None,
+    ):
         self.vocab = vocab
         self.model = model.to(device).eval()
         self.device = device
-        # never suggest control tokens: <pad> <unk> <bos> <eos> <num> <url> <user>
+        bad = load_blocklist() if blocklist is None else blocklist
+        # never suggest control tokens (<pad> <unk> <bos> <eos> <num> <url> <user>) or swear
+        # words (any casing); their probability is zeroed before top-k, so prefix
+        # completions can't surface them either
         self._blocked = torch.tensor(
-            [i for i, w in enumerate(vocab.itos) if w in SPECIALS or w.startswith("<")],
+            [
+                i
+                for i, w in enumerate(vocab.itos)
+                if w in SPECIALS or w.startswith("<") or w.lower() in bad
+            ],
             dtype=torch.long,
         )
 
@@ -75,6 +99,8 @@ class Predictor:
         words, ps = [], []
         low = partial.lower()
         for p_, i in zip(top_p.tolist(), top_i.tolist()):
+            if p_ == 0.0:
+                break  # sorted descending: everything left is blocked
             w = self.vocab.itos[i]
             if partial and not w.lower().startswith(low):
                 continue

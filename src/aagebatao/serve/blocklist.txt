@@ -1,0 +1,53 @@
+# Words the demo never suggests. One per line, lowercase; matched case-insensitively
+# against the vocab, so "Chutiya" and "CHUTIYA" are blocked too.
+# Built by regex-scanning the v0.1 vocab for abuse roots, then reviewed by hand.
+# Deliberately NOT blocked (innocent meanings): chota/choti (small), chod/chodo/chodna (leave),
+# chutti/chuti (holiday), chot (injury), chudi/chudiyan (bangles), chudail, gandi/ganda (dirty),
+# gandhi, kutta/kutte (dog), saala/saale, sex/sexual.
+# Serving only: evaluation stays unfiltered.
+
+# Hinglish
+bc
+mc
+bsdk
+bhenchod
+bhosda
+bhosdike
+madarchod
+chutiya
+chutia
+chutiye
+chutiy
+chutiyan
+chut
+choot
+chood
+chooti
+chodu
+chuda
+chudwa
+gand
+gandu
+lund
+lauda
+loda
+randi
+rand
+kamina
+
+# English
+fuck
+fucking
+fucked
+fuk
+shit
+shitt
+bitch
+bitching
+bitchy
+bastard
+bastards
+dick
+pussy
+slut
+porn

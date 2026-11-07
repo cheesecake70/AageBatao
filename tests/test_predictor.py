@@ -75,3 +75,30 @@ def test_load_from_checkpoint(tmp_path):
     torch.save({"model_state": model.state_dict(), "cfg": {}}, tmp_path / "m_best.pt")
     p = Predictor.load(tmp_path / "m_best.pt", "xs", tmp_path / "vocab.json")
     assert len(p.predict("kya ", k=2).words) == 2
+
+
+@pytest.fixture
+def swear_predictor():
+    torch.manual_seed(0)
+    vocab = Vocab(list(SPECIALS) + ["kya", "chutiya", "Chutiya", "chal", "chutti", "cheez"])
+    model = WordLSTM(len(vocab), 16, 16, 1, 0.0)
+    return Predictor(vocab, model, blocklist=frozenset({"chutiya", "notinvocab"}))
+
+
+def test_blocklist_words_never_suggested(swear_predictor):
+    words = swear_predictor.predict("kya ", k=10).words
+    assert "chutiya" not in words and "Chutiya" not in words  # any casing
+
+
+def test_blocklist_applies_to_prefix_completions(swear_predictor):
+    words = swear_predictor.predict("kya ch", k=10).words
+    assert not any(w.lower() == "chutiya" for w in words)
+    assert {"chal", "chutti", "cheez"} <= set(words)  # innocent near-misses still come through
+
+
+def test_shipped_blocklist_loads():
+    from aagebatao.serve.predictor import load_blocklist
+
+    bad = load_blocklist()
+    assert "chutiya" in bad and "madarchod" in bad
+    assert not {"chota", "chutti", "chodo", "gandhi"} & bad  # innocent words stay allowed
