@@ -59,7 +59,10 @@ class Predictor:
             [
                 i
                 for i, w in enumerate(vocab.itos)
-                if w in SPECIALS or w.startswith("<") or w.lower() in bad
+                if w in SPECIALS
+                or w.startswith("<")
+                or w.lower() in bad
+                or not any(c.isalpha() for c in w)  # punctuation, emoji, symbols: words only
             ],
             dtype=torch.long,
         )

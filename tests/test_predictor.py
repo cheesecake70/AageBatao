@@ -102,3 +102,11 @@ def test_shipped_blocklist_loads():
     bad = load_blocklist()
     assert "chutiya" in bad and "madarchod" in bad
     assert not {"chota", "chutti", "chodo", "gandhi"} & bad  # innocent words stay allowed
+
+
+def test_only_words_are_suggested():
+    torch.manual_seed(0)
+    vocab = Vocab(list(SPECIALS) + ["kya", "hai", ".", ",", "?", "😂", "❤️", "!!", "ok"])
+    pred = Predictor(vocab, WordLSTM(len(vocab), 16, 16, 1, 0.0), blocklist=frozenset())
+    words = pred.predict("kya ", k=10).words
+    assert words and all(any(c.isalpha() for c in w) for w in words)
