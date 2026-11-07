@@ -151,4 +151,4 @@ PyTorch · NumPy · KenLM · FastAPI · Google Cloud Run
 ## Licence
 
 The training data (L3Cube-HingCorpus) is CC BY-NC-SA 4.0, so models trained on it are for
-non-commercial use. See [data/LICENSES.md](data/LICENSES.md) for every source.
+non-commercial use. See [data/LICENSES.md](data/LICENSES.md) for every source...
