@@ -107,6 +107,8 @@ The two test sets come from different sources than the training data on purpose,
 how well the model generalises beyond tweets. More detail is in the
 [datasheet](data/hingmix/v0.1/DATASHEET.md).
 
+Find it on Kaggle - https://www.kaggle.com/datasets/moksshanandu/hingmix-v0-1-roman-hinglish-next-word-dataset 
+
 ## Run it yourself
 
 The trained `m` checkpoint is in the repo, so the demo runs right after cloning:
