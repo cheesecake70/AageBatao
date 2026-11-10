@@ -114,7 +114,7 @@ Find it on Kaggle - https://www.kaggle.com/datasets/moksshanandu/hingmix-v0-1-ro
 The trained `m` checkpoint is in the repo, so the demo runs right after cloning:
 
 ```bash
-git clone https://github.com/AaditJain11/AageBatao.git && cd AageBatao
+git clone https://github.com/cheesecake70/AageBatao && cd AageBatao
 make setup      # installs dependencies with uv
 make demo       # open http://127.0.0.1:8000
 ```
